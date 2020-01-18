@@ -29,9 +29,10 @@ const getData = async () => {
     sunset.setUTCSeconds(sunsetParsed[2]);
     
     return {
-        time: new Date(Date.now()).toLocaleTimeString('cs-CZ'),
-        sunrise: sunrise.toLocaleTimeString('cs-CZ'),
-        sunset: sunset.toLocaleTimeString('cs-CZ'),
+        time: new Date(Date.now()).toLocaleString('cs-CZ'),
+        sunrise: sunrise.toLocaleString('cs-CZ'),
+        sunset: sunset.toLocaleString('cs-CZ'),
+        sunlightNow: Date.now() > sunrise && Date.now() < sunset,
     };
 }
 
@@ -47,7 +48,15 @@ app.get('/text', async(request, response) => {
     const result = await getData();
     
     response.writeHead(200, { 'Content-Type': 'text/plain' });
-    response.write(`time=${result.time},sunrise=${result.sunrise},sunset=${result.sunset}`);
+    response.write(`time=${result.time},sunrise=${result.sunrise},sunset=${result.sunset},sunlightNow=${sunlightNow}`);
+    response.end();
+});
+
+app.get('/sunlightnow', async(request, response) => {
+    const result = await getData();
+
+    response.writeHead(200, { 'Content-type': 'text/plain' });
+    response.write(`${result.sunlightNow}`);
     response.end();
 });
 
