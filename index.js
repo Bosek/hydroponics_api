@@ -27,12 +27,17 @@ const getData = async () => {
     sunset.setUTCHours(parseInt(sunsetParsed[0]) + 12);
     sunset.setUTCMinutes(sunsetParsed[1]);
     sunset.setUTCSeconds(sunsetParsed[2]);
-    
+
+    const sunriseOffset = new Date(sunrise);
+    sunriseOffset.setUTCMinutes(sunriseOffset.getUTCMinutes() + 30);
+    const sunsetOffset = new Date(sunset);
+    sunsetOffset.setUTCMinutes(sunsetOffset.getUTCMinutes() - 30);
+    debugger;
     return {
         time: new Date(Date.now()).toLocaleString('cs-CZ'),
         sunrise: sunrise.toLocaleString('cs-CZ'),
         sunset: sunset.toLocaleString('cs-CZ'),
-        sunlightNow: Date.now() > sunrise && Date.now() < sunset,
+        sunlightNow: Date.now() > sunriseOffset && Date.now() < sunsetOffset,
     };
 }
 
